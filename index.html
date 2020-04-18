@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            // Initialize Firebase
+            // TODO: Replace with your project's customized code snippet
+            var config = {
+                apiKey: "AIzaSyAuCPpqtcIgI-BdV6hDuFPjtwHslWAnbq0",
+                authDomain: "test1-45791.firebaseapp.com",
+                databaseURL: "https://test1-45791.firebaseio.com",
+                projectId: "test1-45791",
+                storageBucket: "test1-45791.appspot.com",
+                messagingSenderId: "851937854782"
+            };
+            firebase.initializeApp(config);
+
+            const messaging = firebase.messaging();
+            messaging
+                .requestPermission()
+                .then(function () {
+                    console.log("Notification permission granted.");
+                    // get the token in the form of promise
+                    return messaging.getToken()
+                })
+                .then(function(token) {
+                    console.log("token is : " + token);
+                    $("#token").val(token);
+                })
+                .catch(function (err) {
+                    console.log("Unable to get permission to notify.", err);
+                });
+
+            messaging.onMessage(function(payload) {
+                console.log("Message received. ", JSON.stringify(payload));
+            });
+
+        });
+    </script>
+</head>
+<body>
+
+
+<textarea id="token"></textarea>
+
+</body>
+
+
+</html>
