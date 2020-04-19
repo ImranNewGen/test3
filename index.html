@@ -45,8 +45,6 @@
             navigator.serviceWorker.register('firebase-messaging-sw.js')
                 .then((registration) => {
                     messaging.useServiceWorker(registration);
-                    console.log(123);
-
                     messaging
                         .requestPermission()
                         .then(function () {
@@ -62,12 +60,11 @@
                             console.log("Unable to get permission to notify.", err);
                         });
 
-                    messaging.onMessage(function(payload) {
-                        console.log("Message received. ", JSON.stringify(payload));
-                    });
-
                 });
 
+            messaging.onMessage(function(payload) {
+                console.log("Message received. ", JSON.stringify(payload));
+            });
         });
     </script>
 </head>
