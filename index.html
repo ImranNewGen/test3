@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
-<head> 
-    <title>Getting Started: Serving Web Content</title> 
+<head>
+    <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
@@ -22,6 +22,7 @@
             firebase.initializeApp(config);
 
             const messaging = firebase.messaging();
+            /*
             messaging
                 .requestPermission()
                 .then(function () {
@@ -39,7 +40,33 @@
 
             messaging.onMessage(function(payload) {
                 console.log("Message received. ", JSON.stringify(payload));
-            });
+            });*/
+
+            navigator.serviceWorker.register('firebase-messaging-sw.js')
+                .then((registration) => {
+                    messaging.useServiceWorker(registration);
+                    console.log(123);
+
+                    messaging
+                        .requestPermission()
+                        .then(function () {
+                            console.log("Notification permission granted.");
+                            // get the token in the form of promise
+                            return messaging.getToken()
+                        })
+                        .then(function(token) {
+                            console.log("token is : " + token);
+                            $("#token").text(token);
+                        })
+                        .catch(function (err) {
+                            console.log("Unable to get permission to notify.", err);
+                        });
+
+                    messaging.onMessage(function(payload) {
+                        console.log("Message received. ", JSON.stringify(payload));
+                    });
+
+                });
 
         });
     </script>
@@ -47,7 +74,7 @@
 <body>
 
 
-<textarea id="token"></textarea>
+<p id="token"></p>
 
 </body>
 
